@@ -7,9 +7,9 @@
 
 import Foundation
 protocol CharactersListViewDelegate: AnyObject {
-    var isSearching: Bool {get set}
+    var isSearching: Bool { get set }
     func characterWasSelected(_ character: Character)
-    func schollViewScrolled(ofseet: Int)
+    func schollViewScrolled(offset: Int)
     func searchForCharacters(startingWith text: String)
     func searchEnded()
 }

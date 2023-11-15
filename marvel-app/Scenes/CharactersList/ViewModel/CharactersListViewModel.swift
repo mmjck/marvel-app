@@ -18,8 +18,8 @@ class CharactersListViewModel {
     
     weak var delegate: CharactersListViewModelDelegate?
     
-//    private let charactersService: FetchCharactersProtocol
-//
+    private let charactersService: FetchCharactersProtocol
+    private(set) var searchedCharacters: [Character] = []
     
     
     private(set) var charactersList: [Character] = [] {
@@ -28,6 +28,6 @@ class CharactersListViewModel {
         }
     }
     
-    
-    private(set) var searchedCharacters: [Character] = []
-}
+    init(charactersService: FetchCharactersProtocol = FetchCharactersService()) {
+        self.charactersService = charactersService
+    }}

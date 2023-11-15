@@ -20,8 +20,15 @@ class NetworkManager: NetworkManagerProtocol {
         self.session = urlSession
     }
     
-    func makeRequestWith<T>(_ request: <<error type>>, completion: @escaping (Result<T, NetworkError>) -> ()) where T : Decodable {
-        <#code#>
+    func makeRequestWith<T>(_ request: APIRequestProtocol, completion: @escaping (Result<T, NetworkError>) -> ()) where T : Decodable {
+        guard let urlRequest = request.createURLRequest() else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        
+        session.dataTask(with: urlRequest) { (data, response, error) in
+            
+        }.resume()
     }
     
 }
