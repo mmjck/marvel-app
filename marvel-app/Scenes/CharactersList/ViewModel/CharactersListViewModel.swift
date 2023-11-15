@@ -16,11 +16,18 @@ class CharactersListViewModel {
     var searchCall = 0
     var searchCompleted = 0
     
-    weak var delegate: CharactersListViewModelDelegate
+    weak var delegate: CharactersListViewModelDelegate?
     
-    private let charactersService: FetchCharactersProtocol
+//    private let charactersService: FetchCharactersProtocol
+//
     
     
+    private(set) var charactersList: [Character] = [] {
+        didSet {
+            delegate?.charactersListViewModelDelegate(self, didLoadCharactersList: charactersList)
+        }
+    }
     
-    private(set) var charactersList: 
+    
+    private(set) var searchedCharacters: [Character] = []
 }
