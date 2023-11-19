@@ -11,7 +11,7 @@ protocol APIRequestProtocol {
     var scheme: String { get }
     var host: String { get }
     var path: String { get }
-    
+
     var httpMethod: HTTPRequestMethod { get }
     var headers: [String: String] { get }
     var bodyParams: [String: Any] { get }

@@ -11,15 +11,22 @@ import Kingfisher
 
 
 class CharacterViewCell: UICollectionViewCell {
-    var character: Character?{
+    
+    
+    var character: Character? {
         didSet {
             guard let character = character else { return }
-            
             nameLabel.text = character.name
-//            cha
-         }
+            imageView.kf.setImage(with: character.pictureURL)
+            
+        }
     }
     
+    
+    
+    static var reuseId: String {
+        return String(describing: self)
+    }
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
@@ -72,7 +79,7 @@ extension CharacterViewCell: ViewCode {
     func addSubviews() {
         self.contentView.addSubview(containerStackView)
     }
-
+    
     func addConstraints() {
         
         NSLayoutConstraint.activate([

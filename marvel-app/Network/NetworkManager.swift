@@ -21,13 +21,71 @@ class NetworkManager: NetworkManagerProtocol {
     }
     
     func makeRequestWith<T>(_ request: APIRequestProtocol, completion: @escaping (Result<T, NetworkError>) -> ()) where T : Decodable {
+        
+        
         guard let urlRequest = request.createURLRequest() else {
             completion(.failure(.invalidURL))
             return
         }
         
+        print(urlRequest.url)
         session.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                var networkError: NetworkError = .unableToFetchData
+                
+                
+                if let connectionError = error as? URLError, connectionError.code == URLError.Code.notConnectedToInternet {
+                    networkError = .noInternetConnection
+                }
+                
+                DispatchQueue.main.async {
+                    completion(.failure((networkError)))
+                }
+                
+            }
             
+            
+            do {
+                guard let data = data else {
+                     return
+                }
+                print(data)
+                
+                let json = try JSONDecoder().decode(T.self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(json))
+                }
+            } catch let error as DecodingError {
+                switch error {
+                case .dataCorrupted(let context):
+                    print(context)
+                case .keyNotFound(let key, let context):
+                    print("Key '\(key)' not found:", context.debugDescription)
+                    print("codingPath:", context.codingPath)
+                    
+                case .typeMismatch(let type, let context):
+                    print("Type '\(type)' mismatch:", context.debugDescription)
+                    print("codingPath:", context.codingPath)
+                    
+                case .valueNotFound(let value, let context):
+                    print("Value '\(value)' not found:", context.debugDescription)
+                    print("codingPath:", context.codingPath)
+                @unknown default:
+                    print(error.localizedDescription)
+                }
+                
+                
+                DispatchQueue.main.async {
+                    completion(.failure(.unableToDecodeData))
+                }
+                
+                
+            }
+            catch {
+                DispatchQueue.main.async {
+                    completion(.failure(.unableToDecodeData))
+                }
+            }
         }.resume()
     }
     

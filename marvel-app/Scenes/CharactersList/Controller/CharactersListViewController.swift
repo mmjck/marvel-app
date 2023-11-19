@@ -15,34 +15,13 @@ final class CharactersListViewController: UIViewController{
     
     private var viewModel: CharactersListViewModel?
     var isSearching: Bool = false
-
+    
     private lazy var charactersListView: CharactersListView = {
         let view = CharactersListView()
         
         view.delegate = self
         return view
     }()
-    
-    
-    private lazy var collectionViewLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 30, left: 20, bottom: 10, right: 20)
-        layout.minimumLineSpacing = 16
-        layout.minimumInteritemSpacing = 20
-        layout.itemSize = CGSize(width: 130, height: 140)
-
-        return layout
-    }()
-    
-    var collectionView: UICollectionView = {
-       let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-       collectionView.translatesAutoresizingMaskIntoConstraints = false
-       collectionView.dataSource = self
-       collectionView.delegate = self
-       collectionView.register(CharacterViewCell.self, forCellWithReuseIdentifier: CharacterViewCell.reuseId)
-       return collectionView
-   }()
     
     
     required init?(coder: NSCoder) {
@@ -61,24 +40,85 @@ final class CharactersListViewController: UIViewController{
         
         self.view = charactersListView
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initialSetup()
+    }
+    
+    private func initialSetup() {
+        setupNavBar()
+        
+        viewModel?.delegate = self
+        viewModel?.loadCharacters()
+    }
+    
+    private func setupNavBar(){
+        self.navigationController?.view.tintColor = .red
+        self.navigationItem.title = "Marvel"
+        
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black
+        ]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
+
+        let backButton = UIBarButtonItem()
+        backButton.title = " "
+        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
+        
+    }
+    
 }
 
 extension CharactersListViewController: CharactersListViewDelegate  {
+    func scrollViewScrolled(offset: Int) {
+        guard let viewModel = viewModel  else { return }
+        
+        
+        if !viewModel.isDataLoading {
+            isSearching ? viewModel.searchForCharacters(offset: offset) : viewModel.loadCharacters()
+        }
+    }
+    
     func characterWasSelected(_ character: Character) {
         
     }
     
-    func schollViewScrolled(offset: Int) {
-        
-    }
-    
     func searchForCharacters(startingWith text: String) {
-        
+        viewModel?.searchForCharacters(startingWith: text)
+
     }
     
     func searchEnded() {
-        
+        if let charactersList = viewModel?.charactersList {
+            charactersListView.loadCollectionView(with: charactersList)
+        }
+        else {
+            viewModel?.loadCharacters()
+        }
     }
     
+    
+}
+
+
+extension CharactersListViewController: CharactersListViewModelDelegate {
+    func charactersListViewModelDelegate(_ viewModel: CharactersListViewModel, didLoadCharactersList charactersList: [Character]) {
+    
+    }
+    
+    func charactersListViewModelDelegate(_ viewModel: CharactersListViewModel, didSearchForCharacters charactersList: [Character]) {
+    
+    }
+    
+    func showError(_ error: NetworkError) {
+        let errorVM = error.getErrorViewModel { [weak self] in
+            self?.charactersListView.hideErrorView()
+            self?.viewModel?.loadCharacters()
+            
+        }
+        
+        charactersListView.showErrorView(errorVM)
+
+    }
     
 }

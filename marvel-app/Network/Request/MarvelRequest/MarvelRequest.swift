@@ -22,11 +22,15 @@ enum MarvelRequest: APIRequestProtocol {
     }
     
     var host: String {
-        switch self {
-        case .charactersList, .searchCharacters, .comicsForCharacter, .charactersForComic:
-            return "gateway.marvel.com"
-        }
+        return "gateway.marvel.com"
+//        switch self {
+//        case .charactersList,
+//                .searchCharacters,
+//                .comicsForCharacter, .charactersForComic:
+//            return "gateway.marvel.com:443"
+//        }
     }
+    //https://gateway.marvel.com:443/v1/public/characters?apikey=31278eed12bece020000e0749120afb8
     
     var path: String {
         switch self {
@@ -62,15 +66,16 @@ enum MarvelRequest: APIRequestProtocol {
         }
         
         return params
-      }
+    }
     
     // MARK: - Marvel Default Query Parameters
     private var defaultQueryItems: [String: String] {
         let timestamp = "\(Date().timeIntervalSince1970)"
-        let hashParam = ("\(timestamp)\(Constants.MarvelAPIKey)\(Constants.MarvelAPIKey)").md5
+        
+        let hashParam = ("\(timestamp)\(Constants.MarvelAPIPrivateKey)\(Constants.MarvelAPIPublicKey)").md5
         
         return [
-            "apikey": Constants.MarvelAPIKey,
+            "apikey": Constants.MarvelAPIPublicKey,
             "ts": timestamp,
             "hash": hashParam
         ]

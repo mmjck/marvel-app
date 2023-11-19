@@ -8,9 +8,9 @@
 import Foundation
 
 struct ErrorViewModel {
-    private (set) var title: String
-    private (set) var message: String
-    private (set) var buttonName: String
+    private(set) var title: String
+    private(set) var message: String
+    private(set) var buttonName: String
     
     let action: () -> Void
     
