@@ -76,9 +76,11 @@ extension CharactersListViewController: CharactersListViewDelegate  {
             isSearching ? viewModel.searchForCharacters(offset: offset) : viewModel.loadCharacters()
         }
     }
-    
     func characterWasSelected(_ character: Character) {
+        let characterDetailViewModel = CharacterDetailViewModel(character: character)
+        let detailVC = CharacterDetailViewController(viewModel: characterDetailViewModel)
         
+        navigationController?.pushViewController(detailVC, animated: false)
     }
     
     func searchForCharacters(startingWith text: String) {

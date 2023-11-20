@@ -7,19 +7,19 @@
 
 import Foundation
 
-struct ComicResponse: Decodable {
+
+struct ComicsResponse: Decodable {
     var results: [Comic]
 }
 
 struct Comic: Decodable {
-    let id: String
+    let id: Int
     let title: String
     let thumbnail: Thumbnail?
     
-    var picture: URL? {
-        let url = (thumbnail?.path ?? "") + "." +
-        (thumbnail?.imageExtension ?? "")
-        
+    var pictureURL: URL? {
+        let url = (thumbnail?.path ?? "") + "." + (thumbnail?.imageExtension ?? "")
         return URL(string: url)
     }
 }
+

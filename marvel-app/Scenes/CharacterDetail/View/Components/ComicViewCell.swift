@@ -5,7 +5,7 @@ class ComicViewCell: UICollectionViewCell {
         didSet  {
             guard let comic = comic else { return }
             titleLabel.text = comic.title
-            comicImageView.kf.setImage(with: comic.picture)
+            comicImageView.kf.setImage(with: comic.pictureURL)
             
         }
     }

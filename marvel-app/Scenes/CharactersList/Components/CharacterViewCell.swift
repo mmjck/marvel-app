@@ -17,7 +17,7 @@ class CharacterViewCell: UICollectionViewCell {
         didSet {
             guard let character = character else { return }
             
-
+            
             nameLabel.text = character.name
             imageView.kf.setImage(with: character.pictureURL)
             

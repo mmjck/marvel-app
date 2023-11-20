@@ -18,7 +18,7 @@ class CharacterDetailViewModel {
     
     private let comicsService: FetchComicsProtocol
     var character: Character?
-
+    
     
     var comicsLit: [Comic] = [] {
         didSet {
@@ -32,4 +32,25 @@ class CharacterDetailViewModel {
         self.character = character
     }
     
+    
+    func loadComics(){
+        isDataLoading = true
+        
+        comicsService.fetchComicsForCharacter(id: character?.id ?? 0, offset: comicsCount){ [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let comics):
+                self.comicsLit.append(contentsOf: comics.data.results)
+                self.comicsCount += self.limit
+            case .failure(let error):
+                self.delegate?.showError(error)
+            }
+            
+            
+            self.isDataLoading = false
+            
+            
+        }
+    }
 }
