@@ -17,7 +17,7 @@ enum MarvelRequest: APIRequestProtocol {
     var scheme: String {
         switch self {
         case .charactersList, .searchCharacters, .comicsForCharacter, .charactersForComic:
-            return "http"
+            return "https"
         }
     }
     
@@ -30,7 +30,6 @@ enum MarvelRequest: APIRequestProtocol {
 //            return "gateway.marvel.com:443"
 //        }
     }
-    //https://gateway.marvel.com:443/v1/public/characters?apikey=31278eed12bece020000e0749120afb8
     
     var path: String {
         switch self {

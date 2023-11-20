@@ -158,3 +158,31 @@ extension CharactersListView: UICollectionViewDelegateFlowLayout {
         return CGSize(width: itemWidth, height: itemWidth * heightProportion)
     }
 }
+
+
+// MARK: - Search Bar Delegate
+
+extension CharactersListView: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        Debounce<String>.input(searchText, comparedAgainst: searchBar.text ?? "") { [weak self] _ in
+//            
+//            self?.delegate?.isSearching = true
+//
+//            if searchBar.text == "" {
+//                self?.resetSearchbar(searchBar)
+//                self?.errorView.removeFromSuperview()
+//            } else {
+//                self?.errorView.removeFromSuperview()
+//                self?.delegate?.searchForCharacters(startingWith: searchText)
+//            }
+//        }
+    }
+    
+    func resetSearchbar(_ searchBar: UISearchBar) {
+        delegate?.isSearching = false
+//        collectionView.reloadData()
+        searchBar.resignFirstResponder()
+        delegate?.searchEnded()
+    }
+}

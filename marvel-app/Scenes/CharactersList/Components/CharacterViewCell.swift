@@ -16,6 +16,8 @@ class CharacterViewCell: UICollectionViewCell {
     var character: Character? {
         didSet {
             guard let character = character else { return }
+            
+
             nameLabel.text = character.name
             imageView.kf.setImage(with: character.pictureURL)
             
@@ -57,7 +59,7 @@ class CharacterViewCell: UICollectionViewCell {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.distribution = .fill
-        stackView.backgroundColor = .blue
+        //stackView.backgroundColor = .blue
         stackView.layer.cornerRadius = 8
         
         

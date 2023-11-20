@@ -49,7 +49,7 @@ class NetworkManager: NetworkManagerProtocol {
                 guard let data = data else {
                      return
                 }
-                print(data)
+                
                 
                 let json = try JSONDecoder().decode(T.self, from: data)
                 DispatchQueue.main.async {

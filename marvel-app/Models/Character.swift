@@ -26,7 +26,10 @@ struct Character: Decodable {
 
     
     var pictureURL: URL? {
-        let url = (thumbnail?.path ?? "") + "." + (thumbnail?.imageExtension ?? "")
+        let url = (thumbnail?.path ?? "")
+        + "." +
+        (thumbnail?.imageExtension ?? "")
+        
         return URL(string: url)
     }
 }

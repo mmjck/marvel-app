@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-
-
 final class CharactersListViewController: UIViewController{
     
     
@@ -60,7 +58,7 @@ final class CharactersListViewController: UIViewController{
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
-
+        
         let backButton = UIBarButtonItem()
         backButton.title = " "
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
@@ -85,7 +83,7 @@ extension CharactersListViewController: CharactersListViewDelegate  {
     
     func searchForCharacters(startingWith text: String) {
         viewModel?.searchForCharacters(startingWith: text)
-
+        
     }
     
     func searchEnded() {
@@ -103,11 +101,26 @@ extension CharactersListViewController: CharactersListViewDelegate  {
 
 extension CharactersListViewController: CharactersListViewModelDelegate {
     func charactersListViewModelDelegate(_ viewModel: CharactersListViewModel, didLoadCharactersList charactersList: [Character]) {
-    
+        
+        charactersListView.loadCollectionView(with: charactersList)
     }
     
     func charactersListViewModelDelegate(_ viewModel: CharactersListViewModel, didSearchForCharacters charactersList: [Character]) {
-    
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let isSearching = self?.isSearching, isSearching else { return }
+            
+            if charactersList.isEmpty {
+                let error = NetworkError.emptySearch.getErrorViewModel { [weak self] in
+                    self?.isSearching = false
+                    self?.charactersListView.hideErrorView()
+                }
+                
+                self?.charactersListView.showErrorView(error)
+            } else {
+                self?.charactersListView.loadCollectionView(with: charactersList)
+            }
+        }
     }
     
     func showError(_ error: NetworkError) {
@@ -118,7 +131,7 @@ extension CharactersListViewController: CharactersListViewModelDelegate {
         }
         
         charactersListView.showErrorView(errorVM)
-
+        
     }
     
 }
