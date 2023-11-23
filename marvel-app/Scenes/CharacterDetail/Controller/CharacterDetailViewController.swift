@@ -67,9 +67,9 @@ class CharacterDetailViewController: UIViewController {
 
 extension CharacterDetailViewController: CharacterDetailViewDelegate {
     func comicWasSelected(_ comic: Comic) {
-        // let comicViewModel = ComicCharactersViewModel(comic: comic)
-        // let detailVC = ComicCharactersViewController(viewModel: comicViewModel)
-        // navigationController?.pushViewController(detailVC, animated: true)
+         let comicViewModel = ComicCharactersViewModel(comic: comic)
+         let detailVC = ComicCharactersViewController(viewModel: comicViewModel)
+         navigationController?.pushViewController(detailVC, animated: true)
     }
 
 }

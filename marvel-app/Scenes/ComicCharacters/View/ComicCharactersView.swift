@@ -71,7 +71,6 @@ class ComicCharactersView: UIView {
     func hideErrorView() {
         // errorView.fadeOut()
         errorView.removeFromSuperview()
-        
         collectionView.reloadData()
     }
 
@@ -80,7 +79,7 @@ class ComicCharactersView: UIView {
 
 extension ComicCharactersView: ViewCode {
     func addSubviews() {
-        addSubview(collectionView)
+        self.addSubview(collectionView)
     }
     func addConstraints() {
         NSLayoutConstraint.activate([
